@@ -1,0 +1,31 @@
+﻿
+@if (Request.IsAuthenticated)
+{
+    <li>
+        <a class="dashboard-widget-link" href="@System.Configuration.ConfigurationManager.AppSettings["DashboardUrl"]">
+            <i class="fa fa-dashboard"></i>Dashboard
+        </a>
+    </li>
+
+    <li>
+        <a class="dashboard-widget-link" href="@Url.Action("ChangePassword", "Account", new { area = "" })">
+            <i class="fa fa-unlock"></i> Change Password
+        </a>
+    </li>
+
+    <li>
+        <a class="dashboard-widget-link" href="@Url.Action("LogOff", "Account", new { area = "" })">
+            <i class="fa fa-sign-out"></i> Sign out
+        </a>
+    </li>
+}
+else
+{
+
+    <li>
+        <a class="dashboard-widget-link" href="@Url.Action("Login","Account", new { area = "" })">
+            <i class="fa fa-sign-in"></i> Login
+        </a>
+    </li>
+
+}

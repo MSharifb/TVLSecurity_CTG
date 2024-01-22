@@ -1,0 +1,79 @@
+﻿@model TVLSecurity.Web.Models.ModuleFormViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Edit";
+}
+
+<form id="frmModuleEdit" method="post" action="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Module</h4>
+    </div>
+    <div class="modal-body">
+        <div class="clearfix">
+            @if (!Model.IsValidModel)
+            {
+                <div class="ui-corner-all divErrorMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+            else
+            {
+                <div class="ui-corner-all divMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label>Module Name</label>
+                <span class="labelRequired">*</span>
+                @Html.Hidden("Model.Module.ModuleId", Model.Module.ModuleId)
+                @Html.TextBox("Model.Module.ModuleName", Model.Module.ModuleName, new { @class = "form-control", @maxlength = "50" })
+                @Html.ValidationMessage("Model.Module.ModuleName")
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="form-group">
+                <label>Module Title</label>
+                <label class="labelRequired">*</label>
+                @Html.TextBox("Model.Module.ModuleTitle", Model.Module.ModuleTitle, new { @class = "form-control", @maxlength = "100" })
+                @Html.ValidationMessage(" Model.Module.ModuleTitle")
+            </span>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group">
+                <label>Application</label>
+                <label class="labelRequired">*</label>
+                @Html.DropDownList("Model.Module.ApplicationId", Model.ApplicationList, "Select One", new { @class = "form-control" })
+                @Html.ValidationMessage("Module.ApplicationId", "*")
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <label>Sort Order</label>
+                <span class="labelRequired">*</span>
+                @Html.TextBox("Model.Module.SortOrder", Model.Module.SortOrder, new { @class = "form-control", @maxlength = "4" })
+                @Html.ValidationMessage("Model.Module.SortOrder")
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <label>Description</label>
+                @Html.TextArea("Model.Module.Description", Model.Module.Description, new { @class = "form-control", @maxlength = 500, onkeyup = "return ismaxlengthPop(this)" })
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="return SaveData('frmModuleEdit','/Security/Module/Edit','MyDialog');">Save changes</button>
+    </div>
+</form>
+

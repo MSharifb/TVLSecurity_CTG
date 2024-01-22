@@ -1,0 +1,32 @@
+﻿@model Entity.RoleGroup
+
+
+@Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.")
+
+@if (Model.IsValid)
+{
+    <label class="successmessage">Data Updated Successfully</label>
+}
+<form id="frmRoleGroupEdit" method="post" action="">
+    <div style="height:100px;" id="divControlContainer">
+        <table>
+            <tr>
+                <td>
+                    Role Group Title
+                </td>
+                <td>
+                    @Html.Hidden("RoleGroupsId", Model.RoleGroupsId)
+                    @Html.TextBox("RoleGroupsTitle", Model.RoleGroupsTitle)
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="divSpacer">
+    </div>
+    <div class="divButtonContainer">
+        <a href="#" onclick="return SaveData('frmRoleGroupEdit','/Security/RoleGroup/Edit','MyDialog');"
+           class="btnSave"></a>
+        <input id="btnSave" name="btnSave" type="submit" value="Save" style="visibility: hidden" />
+    </div>
+</form>
+

@@ -1,0 +1,32 @@
+﻿@model TVLSecurity.Web.Models.ModuleFormViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Menu";
+}
+
+
+<div id="DataList">
+    @{Html.RenderAction("List", "Menu");}
+</div>
+@*<div id="MyDialog">
+
+</div>*@
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="MyDialog">
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    $("#MyDialog").dialog({ autoOpen: false, modal: true, height: 375, width: 500, resizable: false, title: 'Application' });
+
+        //    $("#MyDialog").bind('dialogclose', function (event) {
+        //        window.parent.location = "/Security/Menu/Index";
+        //    });
+        //});
+       
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿@model TVLSecurity.Web.Models.RoleFormViewModel
+
+
+<div class="text-right clearfix" style="margin-bottom:10px">
+    <button type="button" class="btn btn-primary" onclick="return openPopup('/Security/Role/Create')">
+        Add New
+    </button>
+</div>
+<div class="clearfix"></div>
+
+<form id="frmList" method="post" action="">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4">
+                <label> Module</label>
+                @Html.DropDownList("Model.SearchCraiteria.ModuleId", Model.ModuleList, "Select One", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+
+    @if (Model.NoDataFound)
+    {
+        <label class="ui-corner-all divErrorMsg">
+            <strong>
+                @Model.Message
+            </strong>
+        </label>
+    }
+    else
+    {
+        <table id="gridListTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+            <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+                <tr>
+                    <th>
+                        Role Name
+                    </th>
+                    <th>
+                        Application
+                    </th>
+                    <th>
+                        Module
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.RoleList)
+                {
+                    <tr>
+                        <td>
+                            @Html.Encode(item.RoleName)
+                        </td>
+                        <td>
+                            @Html.Encode(item.ApplicationTitle)
+                        </td>
+                        <td>
+                            @Html.Encode(item.ModuleTitle)
+                        </td>
+                        <td>
+                            @Html.Encode(item.Description)
+                        </td>
+                        <td>
+                            <a href="javascript:" onclick="return openPopup('/Security/Role/Edit/@item.RoleId ')">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+</form>
+
+
+<script type="text/javascript">
+
+    function PopulateModuleDropDown() {
+
+        var url = "/Security/Role/GetModuleList";
+        var form = $("#frmList");
+        var serializedForm = form.serialize();
+
+        $.post(url, serializedForm, function (result) {
+            $("#Model_SearchCraiteria_ModuleId").fillSelect(result);
+        }, "json");
+
+        return false;
+    }
+
+
+    $('#Model_SearchCraiteria_ModuleId').on('change', function () {
+        var str = $('#Model_SearchCraiteria_ModuleId option:selected').text();
+        if (str == 'Select One') {
+            str = '';
+        }
+
+        gridTable.columns(2).search(str).draw();
+    });
+
+</script>

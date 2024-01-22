@@ -1,0 +1,135 @@
+﻿@model TVLSecurity.Web.Models.MenuFormViewModel
+
+<div class="box box-info">
+    <div class="box-body">
+        <form id="frmList" method="post" class="form-horizontal" action="">
+            <div class="form-group">                
+                <div class="col-sm-4">
+                    <label>Menu Caption </label>
+                    @Html.TextBox("Model.SearchCraiteria.MenuCaption", Model.MenuCaption, new { @class = "form-control", @maxlength = "100" })
+                </div>
+                <div class="col-sm-4">
+                    <label>Module </label>
+                    @Html.DropDownList("Model.SearchCraiteria.ModuleId", Model.ModuleList, "Select One", new { @class = "form-control" })
+                </div>
+            </div>       
+
+            <div class="text-right clearfix" style="margin-bottom:10px">
+                <button type="button" class="btn btn-primary" onclick="return openPopup('/Security/Menu/Create')">
+                    Add New
+                </button>
+            </div>
+
+            <table id="gridListTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+                    <tr>
+                        @*<th>
+                                Menu Name
+                            </th>*@
+                        <th>
+                            Menu Caption
+                        </th>
+                        <th>
+                            Parent Menu
+                        </th>
+                        <th>
+                            Page Url
+                        </th>
+                        @*<th>
+                                Application
+                            </th>*@
+                        <th>
+                            Module Name
+                        </th>
+                        <th style="width:7%">
+                            Serial No
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.NoDataFound)
+            {
+                        @Model.Message
+                    }
+                    else
+                    {
+                        foreach (var item in Model.MenuList)
+                        {
+                            <tr>
+                                @*<td>
+                                        @item.MenuName
+                                    </td>*@
+                                <td>
+                                    @item.MenuCaption
+                                </td>
+                                @if (String.IsNullOrEmpty(item.ParentMenuName))
+                                {
+                                    <td>
+                                        N/A
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @item.ParentMenuName
+                                    </td>
+                                }
+                                <td>
+                                    @item.PageUrl
+                                </td>
+                                @*<td>
+                                        @item.ApplicationName
+                                    </td>*@
+                                <td>
+                                    @item.ModuleName
+                                </td>
+                                <td>
+                                    @item.SerialNo
+                                </td>
+                                <td>
+                                    <a href="javascript:" onclick="return openPopup('/Security/Menu/Edit/@item.MenuId ')">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>          
+        </form>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    function PopulateModuleDropDown() {
+        var url = "/Security/Menu/GetModuleList";
+        var form = $("#frmList");
+        var serializedForm = form.serialize();
+
+        $.post(url, serializedForm, function (result) {
+            $("#Model_SearchCraiteria_ModuleId").fillSelect(result);
+        }, "json");
+
+        return false;
+    }
+
+    $('#Model_SearchCraiteria_MenuCaption').on('change keyup blur', function () {
+        var str = $(this).val();
+        gridTable.columns(0).search(str).draw();
+
+    });
+
+    $('#Model_SearchCraiteria_ModuleId').on('change', function () {
+        var str = $('#Model_SearchCraiteria_ModuleId option:selected').text();
+        if (str == 'Select One') {
+            str = '';
+        }
+        gridTable.columns(3).search(str).draw();
+    });
+
+</script>

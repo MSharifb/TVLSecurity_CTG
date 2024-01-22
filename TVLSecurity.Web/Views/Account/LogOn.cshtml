@@ -1,0 +1,46 @@
+﻿@model TVLSecurity.Web.Models.LogOnModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Log in";
+}
+
+@using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { id = "frm" }))
+{
+    @*<div id="dvDownloadBrowser" style="text-align:center; display: none; padding-top: 20px; padding-left: 50px;">
+            <label style="color: White;">Browser version you are using is not supported by User Management System (UMS).<br />Supported browsers versions are IE 8.0 & Mozilla 3.6 and above.</label>
+        </div>*@
+    <p class="login-box-msg">Sign in to start your session</p>
+    <div class="form-group login-error">
+        @Html.ValidationSummary("")
+    </div>
+    <div class="form-group has-feedback">
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @maxlength = "50", @placeholder = "Employee ID" })
+        <span class="fa fa-envelope form-control-feedback"></span>
+    </div>
+    <div class="form-group has-feedback">
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @maxlength = "20", @placeholder = "Password" })
+        <span class="fa fa-lock form-control-feedback"></span>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-8">
+                @Html.CheckBoxFor(m => m.RememberMe) Remember Me
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Login</button>
+            </div>
+            <!-- /.col -->
+        </div>
+
+    </div>
+
+}
+<style>
+    .login-error ul {
+        margin:0;
+        padding:0;
+        list-style: none;
+    }
+</style>

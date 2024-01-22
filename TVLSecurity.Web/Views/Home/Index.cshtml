@@ -1,0 +1,127 @@
+﻿@model TVLSecurity.Web.Models.DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+<!-- BAR CHART -->
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Zone wise user List</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="chart">
+            <canvas id="barChart" style="height:230px"></canvas>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-sm-3 col-xs-6">
+                <div class="description-block border-right">
+                    <span class="description-percentage text-blue"><i class="fa fa-users"></i></span>
+                    <h5 class="description-header"><span id="userCount"></span></h5>
+                    <span class="description-text" style="font-size:16px">TOTAL Users</span>
+                </div>
+                <!-- /.description-block -->
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.box -->
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = 'Security/Home/Dashboard'; // Security/Home/Dashboard
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (results) {                   
+                    $('#userCount').text(results.DashboardList[0].TotalUser);
+                    var labels = [], data = [];
+                    results["DashboardList"].forEach(function (packet) {
+                        labels.push(packet.ZoneName);
+                        data.push(packet.ZoneUser);
+                    });
+
+                    var tempData = {
+                        labels: labels,
+                        datasets: [{
+                            label: "Digital Goods",
+                            fillColor: "rgba(60,141,188,0.9)",
+                            strokeColor: "rgba(60,141,188,0.8)",
+                            pointColor: "#3b8bba",
+                            pointStrokeColor: "rgba(60,141,188,1)",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(60,141,188,1)",
+                            backgroundColor: [
+                                  "#f990a7",
+                                  "#aad2ed",
+                                  "#9966FF",
+                                  "#99e5e5",
+                                  "#f990a7",
+                                  "#f7bd83",
+                                  "#f7bd83",
+                                  "#aad2ed",
+                                  "#f7bd83",
+                            ],
+                            data: data
+                        }]
+                    };
+
+                    var barChartCanvas = $("#barChart").get(0).getContext("2d");
+                    var barChart = new Chart(barChartCanvas);
+                    var barChartData = tempData;
+                    var barChartOptions = {
+                        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+                        scaleBeginAtZero: true,
+                        //Boolean - Whether grid lines are shown across the chart
+                        scaleShowGridLines: true,
+                        //String - Colour of the grid lines
+                        scaleGridLineColor: "rgba(0,0,0,.05)",
+                        //Number - Width of the grid lines
+                        scaleGridLineWidth: 1,
+                        //Boolean - Whether to show horizontal lines (except X axis)
+                        scaleShowHorizontalLines: true,
+                        //Boolean - Whether to show vertical lines (except Y axis)
+                        scaleShowVerticalLines: true,
+                        //Boolean - If there is a stroke on each bar
+                        barShowStroke: true,
+                        //Number - Pixel width of the bar stroke
+                        barStrokeWidth: 2,
+                        //Number - Spacing between each of the X value sets
+                        barValueSpacing: 4,
+                        //Number - Spacing between data sets within X values
+                        barDatasetSpacing: 1,
+                        //String - A legend template
+                        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+                        //Boolean - whether to make the chart responsive
+                        responsive: true,
+                        maintainAspectRatio: true
+                    };
+
+                    barChartOptions.datasetFill = false;
+                    barChart.Bar(barChartData, barChartOptions);
+
+                },
+                error: function () {
+                    alert('System is unable to load data please try again.');
+                }
+            });
+        });
+
+    </script>
+
+}

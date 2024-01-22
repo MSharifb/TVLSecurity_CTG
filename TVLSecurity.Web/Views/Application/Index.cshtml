@@ -1,0 +1,50 @@
+﻿@model TVLSecurity.Web.Models.ApplicationFormViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Application";
+}
+
+<div class="box box-info">
+    <div class="box-body">
+        <div id="DataList">
+            @{Html.RenderAction("List", "Application");}
+        </div>
+
+        <!-- Modal -->
+        <div class="modal modal-wide fade" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="MyDialog">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .modal.modal-wide .modal-dialog {
+        width: 50%;
+    }
+
+    .modal-wide .modal-body {
+        overflow-y: auto;
+    }
+</style>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$("#MyDialog").dialog({ autoOpen: false, modal: true, height: 375, width: 500, resizable: false, title: 'Application' });
+
+            //$("#MyDialog").bind('dialogclose', function (event) {
+            //    window.parent.location = "/Security/Application/Index";
+            //});
+            $(".modal-wide").on("show.bs.modal", function () {
+                var height = $(window).height() - 200;
+                $(this).find(".modal-body").css("max-height", height);
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,67 @@
+﻿@model TVLSecurity.Web.Models.MenuFormViewModel
+@using TVLSecurity.Web.Helpers
+
+@*@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+<ul class="sidebar-menu">
+    @foreach (Entity.Menu item in Model.MenuList)
+            {
+
+                if (item.ParentMenuId > 0 && ((item.IsAssignedMenu && String.Compare(HttpContext.Current.User.Identity.Name, TVLSecurity.Web.Code.AppConstraint.SystemInitializer, true) != 0) || String.Compare(HttpContext.Current.User.Identity.Name, TVLSecurity.Web.Code.AppConstraint.SystemInitializer, true) == 0))
+                {
+                    if (item.PageUrl.IndexOf("http:") < 0)
+                    {
+                        string[] urlParts = item.PageUrl.Split('/');
+                        string controller = "";
+                        string action = "";
+                        if (urlParts.Length > 2)
+                        {
+                            controller = urlParts[2].Trim();
+                            action = urlParts[2].Trim();
+
+                    @*if (Html.IsCurrentAction(action, controller, HttpContext.Current))
+                        {
+
+                            <li class="first active">
+                                <span style="color: Black;">
+                                    @item.MenuCaption
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="first">
+                                <a href="@item.PageUrl">
+                                    @item.MenuCaption
+                                </a>
+                            </li>
+                        }*@
+                    <li class="treeview">
+                        <a href="@item.PageUrl">
+                            <i class="fa fa-circle-o"></i> <span>@item.MenuCaption</span>                           
+                        </a>                       
+                    </li>
+                }
+                else
+                {
+                    <li class="treeview">
+                        <a href="@item.PageUrl">
+                            <i class="fa fa-circle-o"></i> <span>@item.MenuCaption</span>
+                        </a>                         
+                    </li>
+                }
+            }
+            else if (item.ModuleId == 2)
+            {               
+                <li class="treeview">
+                    <a href="@item.PageUrl">
+                        <i class="fa fa-circle-o"></i> <span>@item.MenuCaption</span>
+                    </a>
+                </li>                  
+            }
+        }
+    }
+</ul>
+

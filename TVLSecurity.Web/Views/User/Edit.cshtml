@@ -1,0 +1,375 @@
+﻿@model TVLSecurity.Web.Models.UserFormViewModel
+
+@{
+    //Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit";
+}
+
+<style type="text/css">
+    .WaterMarkEffect {
+        color: gray;
+    }
+</style>
+
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('ul#roletree').collapsibleCheckboxTree({
+    //        checkParents: true,
+    //        checkChildren: false,
+    //        uncheckChildren: true,
+    //        initialState: 'expand'
+    //    });
+
+    //});
+
+    function PopulateModuleDropDown() {
+        var url = "/Security/User/GetModuleList";
+        var form = $("#frmUserEdit");
+        var serializedForm = form.serialize();
+
+        $.post(url, serializedForm, function (result) {
+            $("#Model_ModuleId").fillSelect(result);
+        }, "json");
+
+        return false;
+    }
+    $(function () {
+
+        $(".WaterMarkEffect").each(function () {
+            $TextBox = $(this);
+
+            if ($TextBox.val() == $("#Model_OldPassword").val()) {
+
+            }
+            else {
+                $TextBox.removeClass("WaterMarkEffect");
+            }
+        });
+
+        $(".WaterMarkEffect").focus(function () {
+            $TextBox = $(this);
+            if ($TextBox.val() == $("#Model_OldPassword").val()) {
+                $TextBox.val("");
+            }
+
+        });
+
+        $(".WaterMarkEffect").blur(function () {
+            $TextBox = $(this);
+            if ($.trim($TextBox.val()) == "") {
+                $TextBox.val($("#Model_OldPassword").val());
+                $TextBox.addClass("WaterMarkEffect");
+            }
+            else if ($.trim($TextBox.val()) != $("#Model_OldPassword").val()) {
+                $TextBox.removeClass("WaterMarkEffect");
+            }
+        });
+
+
+    });
+</script>
+
+<div class="box box-info">
+    <div class="box-body">
+        <form id="frmUserEdit" method="post" action="">
+
+            @if (!Model.IsValidModel)
+            {
+                <div class="ui-corner-all divErrorMsg">
+                    <p>
+                        @Model.Message
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="ui-corner-all divMsg">
+                    <p>
+                        @*@Model.Message*@
+                        @Html.Raw(HttpUtility.HtmlDecode(@Model.Message))
+                    </p>
+                </div>
+            }
+            @*<div class="clearfix">
+                </div>*@
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <div>
+                        <div class="form-group">
+                            <div>
+                                <label>Login ID: </label>
+                                <span class="labelRequired">*</span>
+                                @Html.TextBox("Model.User.LoginId", Model.User.LoginId, new { @class = "form-control", @maxlength = "50" })
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label> Password:</label>
+                                <span class="labelRequired">*</span>
+                                @Html.Password("Model.User.Password", Model.User.Password, new { @class = "form-control", @minLength = "6", @maxlength = "64" })
+                                @Html.ValidationMessage("Model.User.Password")
+                                @Html.Hidden("Model.OldPassword", Model.OldPassword)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Confirm Password:</label>
+                                <span class="labelRequired"> * </span>
+                                @Html.Password("Model.ConfirmPassword", Model.ConfirmPassword, new { @class = "form-control", @minLength = "6", @maxlength = "64" })
+                                @Html.ValidationMessage("Model.ConfirmPassword")
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Name: </label>
+                                @Html.Hidden("Model.User.UserId", Model.User.UserId)
+                                @Html.TextBox("Model.User.LastName", Model.User.LastName, new { @class = "form-control", @maxlength = "50", @readonly = "readonly" })
+                                @Html.ValidationMessage("Model.User.LastName")
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Email:</label>
+                                @Html.TextBox("Model.User.EmailAddress", Model.User.EmailAddress, new { @class = "form-control", @maxlength = "50", @readonly = "readonly" })
+                                @Html.ValidationMessage("Model.User.EmailAddress")
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>Mobile:</label>
+                                    @Html.TextBox("Model.User.Phone", Model.User.Phone, new { @class = "form-control", @maxlength = "20", @readonly = "readonly" })
+                                    @Html.ValidationMessage("Model.User.Phone", "*")
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>Change Password at First Login:</label>
+                                    <span class="labelRequired">*</span>
+                                    @Html.RadioButton("Model.User.ChangePasswordAtFirstLogin", true, Model.User.ChangePasswordAtFirstLogin) Yes
+                                    @Html.RadioButton("Model.User.ChangePasswordAtFirstLogin", false, !Model.User.ChangePasswordAtFirstLogin) No
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>
+                                        User Group:
+                                    </label>
+                                    @Html.DropDownList("Model.User.GroupId", Model.GroupList, "Select One", new { @class = "form-control" })
+                                    @*@Html.ValidationMessage("Model.User.GroupId")*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>Zone: </label>
+                                    <span class="labelRequired">*</span>
+                                    @Html.DropDownList("Model.User.ZoneId", Model.ZoneList, "Select One", new { @class = "form-control" })
+                                    @Html.ValidationMessage("Model.User.ZoneId")
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <div>
+                                    <label>Employee ID:</label> <span class="labelRequired">*</span>
+                                    <div>
+                                        <div class="input-group">
+                                            @Html.TextBox("Model.User.EmpId", Model.User.EmpId, new { @class = "form-control", @maxlength = "10" })
+                                            <span class="input-group-addon"><a href="javascript:" class="btnSearchSmall" onclick="GetEmployee()"><i class="fa fa-search"></i> Search</a></span>
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessage("Model.User.EmpId")
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>Active Status :</label>&nbsp;
+                                    @Html.RadioButton("Model.User.Status", true, Model.User.Status) Yes
+                                    @Html.RadioButton("Model.User.Status", false, !Model.User.Status) No
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-7">
+                    <div>
+                        <h3>Select Zone: </h3>
+                        <table width="100%">
+                            @for (var i = 0; i < Model.GetZoneList.Count; i++)
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBox("Model.GetZoneList[" + i.ToString() + "].IsAssignedZone", Model.GetZoneList[i].IsAssignedZone)
+                                        @Html.Hidden("Model.GetZoneList[" + i.ToString() + "].ZoneId", Model.GetZoneList[i].ZoneId)
+                                        @Html.Hidden("Model.GetZoneList[" + i.ToString() + "].EmpId", Model.GetZoneList[i].EmpId)
+                                        <label>
+                                            @Model.GetZoneList[i].ZoneName
+                                        </label>
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <div>
+                                <label> Application</label>
+                                <span class="labelRequired">*</span>
+                                @Html.DropDownList("Model.User.ApplicationId", Model.ApplicationList, "Select One", new { @class = "form-control", @onchange = "return PopulateModuleDropDown();" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Module:</label>
+                                @Html.DropDownList("Model.ModuleId", Model.ModuleList, new { @class = "form-control", @onchange = "return SearchData('frmUserEdit','/Security/User/GetMenuList','MyDialog');" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <button type="button" class="btn btn-primary" onclick="return SearchData('frmUserCreate', '/Security/User/GetRoleList', 'MyDialog');">
+                                    <i class="fa fa-search"></i>  Search
+                                </button>
+
+                            </div>*@
+                    </div>
+                    <div id="MyDialog">
+                        @Html.Partial("MenuListForEdit", Model)
+                    </div>
+                    @*<div class="clearfix" style="height:250px; overflow:auto">
+                            <ul id="roletree" onclick="tree();">
+                                <li>
+                                    <input type="checkbox" name="" />
+                                    <label class="treeheaderstyle">
+                                        Roles
+                                    </label>
+                                    <ul>
+                                        @{int tempApplicationId = 0; }
+
+                                        @for (int index = 0; index < Model.RoleList.Count; index++)
+                                        {
+                                            tempApplicationId = Model.RoleList[index].ApplicationId;
+                                            <li>
+                                                <input type="checkbox" name="" />
+                                                <label class="treeheaderstyle">
+                                                    @Model.RoleList[index].ApplicationTitle
+                                                </label>
+                                                <ul>
+                                                    @{bool bolShowParent = false; }
+                                                    @while (!bolShowParent)
+                                                    {
+                                                        int tempModuleId = Model.RoleList[index].ModuleId;
+                                                        bool isChild = true;
+
+                                                        <li>
+                                                            <input type="checkbox" name="" />
+                                                            <label class="treeheaderstyle">
+                                                                @Model.RoleList[index].ModuleTitle
+                                                            </label>
+                                                            <ul>
+                                                                @while (isChild)
+                                                                {
+                                                                    <li>
+                                                                        @Html.CheckBox("Model.RoleList[" + index.ToString() + "].IsAssignedRole", Model.RoleList[index].IsAssignedRole)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleId", Model.RoleList[index].RoleId)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleName", Model.RoleList[index].RoleName)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleGroupsTitle", Model.RoleList[index].ModuleTitle)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleGroupsId", Model.RoleList[index].ModuleId)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].ModuleId", Model.RoleList[index].ModuleId)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].ModuleTitle", Model.RoleList[index].ModuleTitle)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].ApplicationId", Model.RoleList[index].ApplicationId)
+                                                                        @Html.Hidden("Model.RoleList[" + index.ToString() + "].ApplicationTitle", Model.RoleList[index].ApplicationTitle)
+                                                                        <label class="treechildstyle">
+                                                                            @Model.RoleList[index].RoleName
+                                                                        </label>
+                                                                    </li>
+                                                                    index = index + 1;
+                                                                    if (index == Model.RoleList.Count)
+                                                                    {
+                                                                        isChild = false;
+                                                                    }
+                                                                    else if (tempModuleId != Model.RoleList[index].ModuleId) { isChild = false; }
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                        if (index < Model.RoleList.Count)
+                                                        {
+                                                            if (tempApplicationId != Model.RoleList[index].ApplicationId)
+                                                            {
+                                                                bolShowParent = true;
+                                                                index = index - 1;
+                                                            }
+                                                            else
+                                                            {
+                                                                bolShowParent = false;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            bolShowParent = true;
+                                                        }
+
+                                                    }
+                                                </ul>
+                                            </li>
+                                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>*@
+                </div>
+            </div>
+
+
+            <div class="clearfix text-right">
+                <a class="btn btn-warning" href="/Security/User">Back</a>
+                @*<button type="button" class="btn btn-success" onclick="return SaveData('frmUserEdit','/Security/User/Edit','MyDialog');">Save changes</button>*@
+                <input class="btn btn-success" type="submit" value="Save changes" id="btnSave" name="btnSave" />
+
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var zoneId = 0;
+    $(document).ready(function () {
+        zoneId = $('#Model_User_ZoneId').val();
+    });
+
+    $('#Model_User_ZoneId').on("change", function (e) {
+        zoneId = $('#Model_User_ZoneId').val();
+    });
+
+    function GetEmployee() {
+        return openChildPopup('/Security/User/EmployeeList/' + zoneId, 'ChildDialogEmp')
+    };
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    function tree() {
+        $(document).ready(function ($) {
+
+            $('input:checkbox').click(function () {
+                if ($(this).prop('checked')) {
+                    // Check all child checkboxes
+                    $(this).closest('li').find('input:checkbox').prop('checked', true);
+                }
+                else {
+                    // Uncheck all child checkboxes
+                    $(this).closest('li').find('input:checkbox').attr('checked', false);
+                }
+            });
+        });
+    }
+
+
+
+</script>

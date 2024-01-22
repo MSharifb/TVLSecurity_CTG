@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title - User Management System</title>
+    <link rel="shortcut icon" href="@Url.Content("~/Content/images/bepza-logo.png")">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- Bootstrap 3.3.7 -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome 4.7.0-->
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- DataTables -->
+    <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/css/responsive.bootstrap.min.css" rel="stylesheet" />
+
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/plugins/iCheck/flat/blue.css">
+
+    <link href="~/Content/jquery.collapsibleCheckboxTree.css" rel="stylesheet" />
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery 2.2.3 -->
+    <script src="~/Scripts/jquery-2.2.4.min.js"></script>
+
+    <!-- jQuery UI 1.12.1 -->
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/jquery.collapsibleCheckboxTree.js" type="text/javascript"></script>
+    <script src="~/Scripts/utility.js" type="text/javascript"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="index2.html" class="logo"> 
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+                    <img src="~/Content/images/bepza-logo.png" style="width:30px" />
+                </span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <img src="~/Content/images/bepza-logo.png" style="width:60px" />
+                </span>   
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <span class="navbar-branding">
+                    <span class="brand-text">
+                        User Management System
+                    </span>
+                    <small class="brand-secondary-text">
+                        Bangladesh Export Processing Zones Authority
+                    </small>
+                </span>              
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @*<img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">*@
+                                <span class="hidden-xs">@User.Identity.Name</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @Html.Partial("LogOnUserControl")
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    @Html.Action("LeftMenu", "Menu")
+                }
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1 id="menuCaption">
+                    @*@if (!string.IsNullOrEmpty(ViewData["PageTitle"]))
+                        {
+                         @ViewData["PageTitle"]
+                        }*@
+
+                    @ViewData["PageTitle"]
+                </h1>
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            Copyright © <a href="http://bepza.gov.bd"><span style="color: #ff0000;font-weight: bold;">BEPZA</span></a> , Maintained By BEPZA MIS
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <!-- Jquery Datatable -->
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.min.js"></script>
+    @*<script src="~/Scripts/DataTables/dataTables.responsive.min.js"></script>
+        <script src="~/Scripts/DataTables/responsive.bootstrap.min.js"></script>*@
+
+
+
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    @*<script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>*@
+
+
+    <!-- Slimscroll -->
+    <script src="~/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/plugins/fastclick/fastclick.js"></script>
+
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/app.min.js"></script>
+
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
+
+
+
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        var gridTable = $('#gridListTable').DataTable({
+            "paging": true,
+            "scrollX": true,
+            "aoColumnDefs": [
+                 {
+                     "bSortable": false,
+                     "aTargets": [-1] // <-- gets last column and turns off sorting
+                 }
+            ]
+        });
+        //});
+
+
+        function openPopup(strUrl) {
+            //debugger;
+            GetAjaxCallWithAction(strUrl, 'MyDialog', 'GET');
+            $('#myModal').modal('show');
+            // Jquery draggable
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+            //$('#MyDialog').dialog('open');
+            //return false;
+        }
+
+        //function openChildPopup(strUrl, divName, divH, divW, strTitle) {
+        //    GetAjaxCallWithAction(strUrl, divName, 'GET');
+
+        //    $('#' + divName).dialog({ autoOpen: false, modal: true, minheight: parseInt(divH), width: parseInt(divW), resizable: false, title: strTitle });
+        //    $('#' + divName).dialog("open");
+        //    return false;
+        //}
+
+        function openChildPopup(strUrl, divName) {
+            GetAjaxCallWithAction(strUrl, divName, 'GET');
+
+            $('#childModal').modal('show');
+        }
+
+        function SaveData(frm, act, targetdiv) {
+
+            executeAction(frm, act, targetdiv);
+            return false;
+        }
+
+        function SearchData(frm, act, targetdiv) {
+            executeAction(frm, act, targetdiv);
+            return false;
+        }
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

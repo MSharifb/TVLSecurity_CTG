@@ -1,0 +1,246 @@
+﻿@model TVLSecurity.Web.Models.MenuFormViewModel
+
+
+<form id="frmMenuEdit" method="post" action="">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Menu</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="clearfix">
+            @if (!Model.IsValidModel)
+            {
+                <div class="ui-corner-all divErrorMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+            else
+            {
+                <div class="ui-corner-all divMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label>Application</label>
+                <span class="labelRequired">*</span>
+                @Html.Hidden("Model.SearchCraiteria.ApplicationId", Model.SearchCraiteria.ApplicationId)
+                @Html.DropDownList("Model.Menu.ApplicationId", Model.ApplicationList, "Select One", new { @class = "form-control", @onchange = "return PopulateModuleDropDown();" })
+                @Html.ValidationMessage("Model.Menu.ApplicationId")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Module
+                </label>
+                <span class="labelRequired">*</span>
+                @Html.DropDownList("Model.Menu.ModuleId", Model.ModuleList, "Select One", new { @class = "form-control", @onchange = "return PopulateParentMenuDropDown();" })
+                @Html.ValidationMessage("Model.Menu.ModuleId")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Parent Menu
+                </label>
+                @Html.DropDownList("Model.Menu.ParentMenuId", Model.MenuSelectList, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Menu Name
+                </label>
+                <span class="labelRequired">
+                    *
+                </span>
+                @Html.Hidden("Model.Menu.MenuId", Model.Menu.MenuId)
+                @Html.TextBox("Model.Menu.MenuName", Model.Menu.MenuName, new { @class = "form-control", @maxlength = "50" })
+                @Html.ValidationMessage("Model.Menu.MenuName")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Menu Caption
+                </label>
+                <span class="labelRequired">
+                    *
+                </span>
+                @Html.TextBox("Model.Menu.MenuCaption", Model.Menu.MenuCaption, new { @class = "form-control", @maxlength = "100" })
+                @Html.ValidationMessage("Model.Menu.MenuCaption")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Page Url
+                </label>
+                @Html.TextBox("Model.Menu.PageUrl", Model.Menu.PageUrl, new { @class = "form-control", @maxlength = "256" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>
+                    Serial No.
+                </label>
+                <span class="labelRequired">
+                    *
+                </span>
+                @Html.TextBox("Model.Menu.SerialNo", Model.Menu.SerialNo, new { @class = "form-control", @maxlength = "4" })
+                @Html.ValidationMessage("Model.Menu.SerialNo")
+            </div>
+        </div>
+
+    </div>
+    @*<div style="height: 330px; width: 440px;">
+        <div style="height: 330px; width: 440px; position: relative; float: left; padding-left: 10px;"
+             id="divControlContainer">
+            <table width="100%">
+                <tr>
+                    <td style="vertical-align: middle;">
+                        <label>
+                            Application
+                        </label>
+                        <label class="labelRequired">
+                            *
+                        </label>
+                    </td>
+                    <td>
+                        @Html.Hidden("Model.SearchCraiteria.ApplicationId")
+                        @Html.DropDownList("Model.Menu.ApplicationId", Model.ApplicationList, "Select One", new { @class = "dropdown", @style = "width:300px;", @onchange = "return PopulateModuleDropDown();" })
+                        @Html.ValidationMessage("Model.Menu.ApplicationId")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Module
+                        </label>
+                        <label class="labelRequired">
+                            *
+                        </label>
+                    </td>
+                    <td>
+                        @Html.DropDownList("Model.Menu.ModuleId", Model.ModuleList, "Select One", new { @class = "dropdown", @style = "width:300px;", @onchange = "return PopulateParentMenuDropDown();" })
+                        @Html.ValidationMessage("Model.Menu.ModuleId")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Parent Menu
+                        </label>
+                    </td>
+                    <td>
+                        @Html.DropDownList("Model.Menu.ParentMenuId", Model.MenuSelectList, new { @class = "dropdown", @style = "width:300px;" })
+
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                        <label>Menu Name</label>
+                        <label class="labelRequired">*</label>
+                    </td>
+                    <td>
+                        @Html.Hidden("Model.Menu.MenuId", Model.Menu.MenuId, new { @style = "width:300px" })
+                        @Html.TextBox("Model.Menu.MenuName", Model.Menu.MenuName, new { @class = "input-box", @style = "width:300px", @maxlength = "50" })
+                        @Html.ValidationMessage("Model.Menu.MenuName")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Menu Caption
+                        </label>
+                        <label class="labelRequired">
+                            *
+                        </label>
+                    </td>
+                    <td>
+                        @Html.TextBox("Model.Menu.MenuCaption", Model.Menu.MenuCaption, new { @class = "input-box", @style = "width:300px", @maxlength = "100" })
+                        @Html.ValidationMessage("Model.Menu.MenuCaption")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Page Url
+                        </label>
+                    </td>
+                    <td>
+                        @Html.TextBox("Model.Menu.PageUrl", Model.Menu.PageUrl, new { @class = "input-box", @style = "width:300px;", @maxlength = "256" })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Serial No.
+                        </label>
+                        <label class="labelRequired">
+                            *
+                        </label>
+                    </td>
+                    <td>
+                        @Html.TextBox("Model.Menu.SerialNo", Model.Menu.SerialNo, new { @class = "input-box", @style = "width:300px", @maxlength = "4" })
+                        @Html.ValidationMessage("Model.Menu.SerialNo")
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>*@
+
+    @*<div style="text-align: center;" class="ui-corner-all divButtonContainer">
+        <input id="btnSave" style="font-size: 0.9em;" class="button button-big" name="btnSave"
+               type="button" value="Save" onclick="return SaveData('frmMenuEdit','/Security/Menu/Edit','MyDialog');" />
+    </div>
+
+    <div class="divSpacer">
+    </div>*@
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="return SaveData('frmMenuEdit', '/Security/Menu/Edit', 'MyDialog');">Save changes</button>
+    </div>
+
+</form>
+
+
+<script type="text/javascript">
+
+        function PopulateModuleDropDown() {
+            var url = "/Security/Menu/GetModuleList";
+            var form = $("#frmMenuEdit");
+            var serializedForm = form.serialize();
+            $.post(url, serializedForm, function (result) {
+                $("#Model_Menu_ModuleId").fillSelect(result);
+            }, "json");
+
+            return false;
+        }
+        function PopulateParentMenuDropDown() {
+
+            var url = "/Security/Menu/GetParentMenuList";
+            var form = $("#frmMenuEdit");
+            var serializedForm = form.serialize();
+
+            $.post(url, serializedForm, function (result) {
+                $("#Model_Menu_ParentMenuId").fillSelect(result);
+            }, "json");
+
+            return false;
+        }
+    </script>

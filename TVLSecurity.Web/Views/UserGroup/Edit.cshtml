@@ -1,0 +1,200 @@
+﻿@model TVLSecurity.Web.Models.UserGroupFormViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Edit";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('ul#roletree').collapsibleCheckboxTree();
+    });
+
+    function PopulateModuleDropDown() {
+        var url = "/Security/UserGroup/GetModuleList";
+        var form = $("#frmUserGroupEdit");
+        var serializedForm = form.serialize();
+
+        $.post(url, serializedForm, function (result) {
+            $("#Model_ModuleId").fillSelect(result);
+        }, "json");
+
+        return false;
+    }
+
+    function tree() {
+        $(document).ready(function ($) {
+
+            $('input:checkbox').click(function () {
+                debugger;
+                if ($(this).prop('checked')) {
+                    // Check all child checkboxes
+                    $(this).closest('li').find('input:checkbox').prop('checked', true);
+                }
+                else {
+                    // Uncheck all child checkboxes
+                    $(this).closest('li').find('input:checkbox').attr('checked', false);
+                }
+            });
+        });
+    }
+</script>
+
+<form id="frmUserGroupEdit" method="post" action="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">User Group</h4>
+    </div>
+    <div class="modal-body">
+        <div class="clearfix">
+            @if (!Model.IsValidModel)
+            {
+            <div class="ui-corner-all divErrorMsg">
+                <strong>
+                    @Model.Message
+                </strong>
+            </div>
+            }
+            else
+            {
+            <div class="ui-corner-all divMsg">
+                <strong>
+                    @Model.Message
+                </strong>
+            </div>
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>Group Title</label>
+                        <span class="labelRequired">*</span>
+                        @Html.Hidden("Model.Group.GroupId", Model.Group.GroupId)
+                        @Html.TextBox("Model.Group.GroupName", Model.Group.GroupName, new { @class = "form-control", @maxlength = "50" })
+                        @Html.ValidationMessage("Model.Group.GroupName")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label>Description</label>
+                        @Html.TextArea("Model.Group.Description", Model.Group.Description, new { @class = "form-control", @maxlength = 256, onkeyup = "return ismaxlengthPop(this);" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div>
+                    <div class="clearfix" style="margin-bottom:20px">
+                        <div class="form-group">
+                            <div>
+                                <label> Application </label>
+                                @Html.DropDownList("Model.ApplicationId", Model.ApplicationList, "Select One", new { @class = "form-control", @onchange = "return PopulateModuleDropDown();" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label>Module:</label>
+                                @Html.DropDownList("Model.ModuleId", Model.ModuleList, "Select One", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <button type="button" class="btn btn-primary" onclick="return SearchData('frmUserGroupEdit', '/Security/UserGroup/GetRoleList', 'MyDialog');">
+                                    <i class="fa fa-search"></i>  Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height: 350px; overflow:auto">
+                        <ul id="roletree" onclick="tree();">
+                            <li>
+                                <input type="checkbox" name="" />
+                                <label class="treeheaderstyle">Roles</label>
+                                <ul>
+                                    @{int tempApplicationId = 0; }
+
+                                    @for (int index = 0; index < Model.RoleList.Count; index++)
+                                    {
+                                        tempApplicationId = Model.RoleList[index].ApplicationId;
+                                        <li>
+                                            <input type="checkbox" name="" />
+                                            <label class="treeheaderstyle">@Model.RoleList[index].ApplicationTitle</label>
+                                            <ul>
+                                                @{bool bolShowParent = false; }
+
+                                                @while (!bolShowParent)
+                                                {
+                                                    int tempModuleId = Model.RoleList[index].ModuleId;
+                                                    bool isChild = true;
+
+                                                    <li>
+                                                        <input type="checkbox" name="" />
+                                                        <label class="treeheaderstyle">@Model.RoleList[index].ModuleTitle</label>
+                                                        <ul>
+                                                            @while (isChild)
+                                                            {
+                                                                <li>
+                                                                    @Html.CheckBox("Model.RoleList[" + index.ToString() + "].IsAssignedRole", Model.RoleList[index].IsAssignedRole)
+                                                                    @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleId", Model.RoleList[index].RoleId)
+                                                                    @Html.Hidden("Model.RoleList[" + index.ToString() + "].RoleName", Model.RoleList[index].RoleName)
+                                                                    @Html.Hidden("Model.RoleList[" + index.ToString() + "].ModuleTitle", Model.RoleList[index].ModuleTitle)
+                                                                    @Html.Hidden("Model.RoleList[" + index.ToString() + "].ApplicationTitle", Model.RoleList[index].ApplicationTitle)
+                                                                    @Html.Hidden("Model.RoleList[" + index.ToString() + "].ModuleId", Model.RoleList[index].ModuleId)
+                                                                    <label class="treechildstyle">@Model.RoleList[index].RoleName</label>
+                                                                </li>
+                                                                index = index + 1;
+                                                                if (index == Model.RoleList.Count)
+                                                                {
+                                                                    isChild = false;
+                                                                }
+                                                                else if (tempModuleId != Model.RoleList[index].ModuleId)
+                                                                {
+                                                                    isChild = false;
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    </li>
+
+                                                    if (index < Model.RoleList.Count)
+                                                    {
+                                                        if (tempApplicationId != Model.RoleList[index].ApplicationId)
+                                                        {
+                                                            bolShowParent = true;
+                                                            index = index - 1;
+                                                        }
+                                                        else
+                                                        {
+                                                            bolShowParent = false;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        bolShowParent = true;
+                                                    }
+
+                                                }
+                                            </ul>
+                                        </li>
+                                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="return SaveData('frmUserGroupEdit','/Security/UserGroup/Edit','MyDialog');">Save changes</button>
+    </div>
+
+</form>

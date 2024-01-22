@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "User";
+}
+<div class="box box-info">
+    <div class="box-body">
+        <div id="DataList">
+            @{Html.RenderAction("List", "User");}
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+@*<div class="modal modal-wide fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="MyDialog">
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal.modal-wide .modal-dialog {
+            width: 80%;
+        }
+
+        .modal-wide .modal-body {
+            overflow-y: auto;
+        }
+    </style>*@
+
+
+<script type="text/javascript">
+    $('#Model_SearchCraiteria_LastName').on('change keyup blur', function () {
+        var str = $(this).val();
+        gridTable.columns(0).search(str).draw();
+    });
+
+    $('#Model_SearchCraiteria_LoginId').on('change keyup blur', function () {
+        var str = $(this).val();
+        gridTable.columns(1).search(str).draw();
+
+    });
+
+    $('#Model_SearchCraiteria_ZoneId').on('change', function () {
+        var str = $('#Model_SearchCraiteria_ZoneId option:selected').text();
+        if (str == 'Select One') {
+            str = '';
+        }
+        gridTable.columns(3).search(str).draw();
+    });
+
+
+
+</script>

@@ -1,0 +1,90 @@
+﻿@model TVLSecurity.Web.Models.UserGroupFormViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "UserGroup";
+}
+
+<div class="box box-info">
+    <div class="box-body">
+        <div class="text-right clearfix" style="margin-bottom:10px">
+            <button type="button" class="btn btn-primary" onclick="return openPopup('/Security/UserGroup/Create')">
+                Add New
+            </button>
+        </div>
+
+
+        <table id="gridListTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+            <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+                <tr>
+                    <th>
+                        Group Title
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.GroupList)
+                {
+                    <tr>
+                        <td>
+                            @Html.Encode(item.GroupName)
+                        </td>
+                        <td>
+                            @Html.Encode(item.Description)
+                        </td>
+                        <td>
+                            <a href="javascript:" onclick="return openPopup('/Security/UserGroup/Edit/@item.GroupId')">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+
+        <!-- Modal -->
+        <div class="modal modal-wide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="MyDialog">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .modal.modal-wide .modal-dialog {
+        width: 80%;
+    }
+
+    .modal-wide .modal-body {
+        overflow-y: auto;
+    }
+</style>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".modal-wide").on("show.bs.modal", function () {
+                var height = $(window).height() - 200;
+                $(this).find(".modal-body").css("max-height", height);
+            });
+
+            //$("#MyDialog").dialog({ autoOpen: false, modal: true, height: 520, width: 750, resizable: false, title: 'User Group' });
+            //$("#MyDialog").bind('dialogclose', function (event) {
+            //    window.parent.location = '/Security/UserGroup';
+            //});
+        });
+
+    </script>
+}

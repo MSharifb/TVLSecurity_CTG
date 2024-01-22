@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Entity.RoleGroup>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "RoleGroup";
+}
+
+<div class="box box-info">
+    <div class="box-body">
+        <div class="text-right clearfix" style="margin-bottom:10px">
+            <button type="button" class="btn btn-primary" onclick="return openPopup('/Security/RoleGroup/Create')">
+                Add New
+            </button>
+        </div>
+
+        <table id="gridListTable" class="table table-striped table-bordered table-hover">
+            <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+                <tr>
+                    <th>
+                        Role Group
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.Encode(item.RoleGroupsTitle)
+                        </td>
+                        <td>
+                            <a href="#" class="gridEdit" onclick="return openPopup('/Security/RoleGroup/Edit/@item.RoleGroupsId')">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="MyDialog">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $("#MyDialog").dialog({ autoOpen: false, modal: true, height: 250, width: 350, title: 'Role Information' });
+            });
+
+        </script>*@
+}

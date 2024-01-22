@@ -1,0 +1,70 @@
+﻿@model TVLSecurity.Web.Models.ApplicationFormViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Create";
+}
+
+<form id="frmApplicationCreate" method="post" action="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Application</h4>
+    </div>
+    <div class="modal-body">
+        <div class="clearfix">
+            @if (!Model.IsValidModel)
+            {
+                <div class="ui-corner-all divErrorMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+            else
+            {
+                <div class="ui-corner-all divMsg">
+                    <strong>
+                        @Model.Message
+                    </strong>
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <div>
+                <label>Application Name</label>
+                <span class="labelRequired">*</span>
+                @Html.Hidden("Model.Application.ApplicationId", Model.Application.ApplicationId)
+                @Html.TextBox("Model.Application.ApplicationName", Model.Application.ApplicationName, new { @class = "form-control", @maxlength = "50" })
+                @Html.ValidationMessage("Model.Application.ApplicationName")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>Application Title</label>
+                <span class="labelRequired">*</span>
+                @Html.TextBox("Model.Application.ApplicationTitle", Model.Application.ApplicationTitle, new { @class = "form-control", @maxlength = "100" })
+                @Html.ValidationMessage("Model.Application.ApplicationTitle")
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>Description</label>
+                @Html.TextArea("Model.Application.Description", Model.Application.Description, new { @class = "form-control", @maxlength = 500, onkeyup = "return ismaxlengthPop(this)" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label>Is 2 step verification Enable</label>
+                @Html.CheckBox("Model.Application.IsVerificationEnable",true, Model.Application.IsVerificationEnable)
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="return SaveData('frmApplicationCreate','/Security/Application/Create','MyDialog');">Save changes</button>
+    </div>
+
+
+
+</form>
+

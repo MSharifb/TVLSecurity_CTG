@@ -1,0 +1,131 @@
+﻿@model TVLSecurity.Web.Models.UserFormViewModel
+
+<script type="text/javascript">
+
+    function Delete(Id) {
+        var result = confirm('Pressing OK will delete this record. Do you want to continue?');
+        if (result == true) {
+            var targetDiv = "#DataList";
+            var url = "/Security/User/Delete/" + Id;
+            var form = $("#frmList");
+            var serializedForm = form.serialize();
+
+            $.post(url, serializedForm, function (result) { $(targetDiv).html(result); }, "html");
+            location.reload(true)
+        }
+        return false;
+    }
+   
+</script>
+
+<form id="frmList" method="post" class="form-horizontal" action="">
+    <div class="form-group">
+        <div class="col-sm-4">
+            <label>Name</label>
+            @Html.TextBox("Model.SearchCraiteria.LastName", Model.SearchCraiteria.LastName, new { @class = "form-control", @maxlength = "50" })
+        </div>
+        <div class="col-sm-4">
+            <label>Login ID</label>
+            @Html.TextBox("Model.SearchCraiteria.LoginId", Model.SearchCraiteria.LoginId, new { @class = "form-control", @maxlength = "50" })
+        </div>
+        <div class="col-sm-4">
+            <label>Zone</label>
+            @Html.DropDownList("Model.SearchCraiteria.ZoneId", Model.SearchZoneList, "Select One", new { @class = "form-control" })
+        </div>
+    </div>
+
+    @*<div class="text-right clearfix" style="margin-bottom:10px">
+        <button type="button" class="btn btn-primary" onclick="return openPopup('/Security/User/Create')">
+            Add New
+        </button>
+    </div>*@
+    <div class="text-right clearfix" style="margin-bottom:10px">
+        <a class="btn btn-primary" href="/Security/User/Create">Add New</a>
+        @*<button type="button" class="btn btn-primary" onclick="return openPopup('/Security/User/Create')">
+            Add New
+        </button>*@
+    </div>
+
+    <table id="gridListTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+        <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Login ID
+                </th>              
+                <th>
+                    Email
+                </th>
+                <th>
+                    Zone Name
+                </th>
+                <th>
+                    Created By
+                </th>
+                <th>
+                    Last Login Date
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.NoDataFound)
+            {
+                <tr>
+                    @Model.Message
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.UserList)
+                {
+                    <tr>
+                        <td>
+                            @Html.Encode(item.LastName)
+                        </td>
+                        <td>
+                            @Html.Encode(item.LoginId)
+                        </td>                       
+                        <td>
+                            @Html.Encode(item.EmailAddress)
+                        </td>
+                        <td>
+                            @Html.Encode(item.ZoneName)
+                        </td>
+                        <td>
+                            @Html.Encode(item.CreatedBy)
+                        </td>
+                        @*<td>
+                                @Html.Encode(String.Format("{0:d}", item.CreatedDate))
+                            </td>*@
+                        <td>
+                            @Html.Encode(String.Format("{0:d}", item.LastLoginDate))
+                        </td>
+                        <td>
+                            @*<a href="javascript:" onclick="return openPopup('/Security/User/Edit/@item.UserId')">
+                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                            </a>*@     
+                            <a href="/Security/User/Edit/@item.UserId">
+                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                            </a>                         
+                        </td>
+                        <td>
+                            <a href="#" onclick='return Delete("@item.UserId");'>
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+
+</form>
